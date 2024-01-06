@@ -62,7 +62,7 @@ const handleLanguageChange =(e)=>{
 
       {user && (<div className='flex items-center space-x-1 '>
         {ShowGPT && <select className='bg-gray-900 p-2 text-white m-2' onChange={handleLanguageChange}>
-          {console.log("handled lang change")}
+        
           {SUPPORTED_LANGUAGES.map(lang => <option key={lang.identifier}value={lang.identifier}>{lang.name}</option> )}
         </select>}
         

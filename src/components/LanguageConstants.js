@@ -11,6 +11,14 @@ const lang = {
         search: "Buscar",
         gptSearchPlaceholder:"¿Qué te gusta ver hoy?..."
 
+    },
+    german:{
+        search: "Suchen",
+        gptSearchPlaceholder: "Was möchten Sie heute sehen..."
+    },
+    french:{
+        search: "Recherche",
+        gptSearchPlaceholder: "Qu'aimeriez-vous voir aujourd'hui..."
     }
 }
 

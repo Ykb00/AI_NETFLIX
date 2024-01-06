@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import lang from './LanguageConstants'
 import openai from '../utils/openai'
@@ -7,10 +7,15 @@ import { API_OPTIONS } from './Constants'
 import { addGPTmovieResult } from '../utils/gptSlice'
 
 
+
+
+
 const GptSearchBar = () => {
   const dispatch = useDispatch()
     const langKey = useSelector((store)=> store.config.lang)
-    console.log(langKey)
+    // const { movieResults } = useSelector((store) => store.gpt);
+    const [loadingText, setLoadingText] = useState(lang[langKey].search)
+    
     const searchText = useRef('')
     const prompt = "Act as a movie recommendation system and suggest some movies for the query : "
      + searchText.current.value 
@@ -24,11 +29,24 @@ const GptSearchBar = () => {
     
     }
 
+    const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleGPTsearchClick();
+      
+    }
+  }
+
 
 
 
     const handleGPTsearchClick = async() => {
       if (!searchText.current) return null;
+
+      setLoadingText('Loading...')
+      setTimeout(()=>{
+        setLoadingText(lang[langKey].search)
+      },3000)
 
       const prompt = "Act as a movie recommendation system and suggest some movies for the query : "
      + searchText.current.value 
@@ -51,21 +69,30 @@ const GptSearchBar = () => {
         
 
         dispatch(addGPTmovieResult({movieNames: gptMovies, movieResults: tmdb_results}))
+
+        
+        
     }
 
     
 
   return (
+    
     <div className='pt-[35%] md:p-[10%] flex justify-center '>
         <form className='w-full md:w-1/2 bg-black grid grid-cols-12 rounded-xl' onSubmit={(e)=> e.preventDefault()}>
             <input type='text' placeholder={lang[langKey].gptSearchPlaceholder} 
                 className='p-4 m-4 col-span-9 rounded-xl'
                 ref={searchText}
+                onKeyPress={handleKeyPress}
             />
             <button className='p-4 m-4 bg-red-700 col-span-3 text-white rounded-lg hover:bg-opacity-85'
               onClick={handleGPTsearchClick}
-            >{lang[langKey].search}</button>
+            >{loadingText}</button>
         </form>
+
+      
+        
+          
 
     </div>
   )
